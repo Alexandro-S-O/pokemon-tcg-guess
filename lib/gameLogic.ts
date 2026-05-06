@@ -9,10 +9,10 @@ export const BASE_POINTS: Record<Stage, number> = {
 }
 
 export const BLUR_VALUES: Record<Stage, string> = {
-  1: 'blur(40px)',
-  2: 'blur(24px)',
-  3: 'blur(12px)',
-  4: 'blur(4px)',
+  1: 'blur(10px)',
+  2: 'blur(6px)',
+  3: 'blur(3px)',
+  4: 'blur(1px)',
   5: 'blur(0px)',
 }
 
