@@ -13,7 +13,8 @@ import StageIndicator from '@/components/StageIndicator'
 function GameInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const seriesId = searchParams.get('series')
+  const seriesId = searchParams.get('series') // legacy: specific set ID
+  const serieId = searchParams.get('serie')   // new: whole serie
 
   const { state, startGame, submitGuess, advance } = useGameState()
   const [shake, setShake] = useState(false)
@@ -21,7 +22,7 @@ function GameInner() {
   const prevStatus = useRef(state.gameStatus)
 
   useEffect(() => {
-    startGame(seriesId)
+    startGame(seriesId, serieId)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -53,7 +54,7 @@ function GameInner() {
 
   if (state.loading && !state.currentCard) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center">
         <p className="text-white/50 animate-pulse text-lg">Loading cards...</p>
       </div>
     )
@@ -61,7 +62,7 @@ function GameInner() {
 
   if (state.error) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-[#0a0f1e] flex flex-col items-center justify-center gap-4">
         <p className="text-red-400">{state.error}</p>
         <button
           onClick={() => router.push('/')}
@@ -80,7 +81,7 @@ function GameInner() {
   const inputDisabled = isRevealed || isCorrect || state.loading
 
   return (
-    <main className="min-h-screen px-4 py-6 flex flex-col">
+    <main className="min-h-screen bg-[#0a0f1e] text-white px-4 py-6 flex flex-col">
       {/* Top bar */}
       <div className="flex items-center justify-between max-w-2xl mx-auto w-full mb-6">
         <button
@@ -159,7 +160,7 @@ export default function GamePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen bg-[#0a0f1e] flex items-center justify-center">
           <p className="text-white/50 animate-pulse text-lg">Loading...</p>
         </div>
       }

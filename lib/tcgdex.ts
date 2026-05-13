@@ -15,6 +15,15 @@ export async function fetchCardsForSet(setId: string): Promise<CardBrief[]> {
   return (data.cards ?? []).filter((c: CardBrief) => c.image)
 }
 
+export async function fetchCardsForSerie(serieId: string): Promise<CardBrief[]> {
+  const res = await fetch(`${BASE}/series/${serieId}`)
+  if (!res.ok) throw new Error(`Failed to fetch serie ${serieId}`)
+  const data = await res.json()
+  const setIds: string[] = (data.sets ?? []).map((s: { id: string }) => s.id)
+  const allCards = await Promise.all(setIds.map(fetchCardsForSet))
+  return allCards.flat()
+}
+
 export async function fetchAllCards(): Promise<CardBrief[]> {
   const res = await fetch(`${BASE}/cards`)
   if (!res.ok) throw new Error('Failed to fetch all cards')

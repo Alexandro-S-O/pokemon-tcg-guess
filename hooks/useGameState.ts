@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { fetchCard, fetchAllCards, fetchCardsForSet } from '@/lib/tcgdex'
+import { fetchCard, fetchAllCards, fetchCardsForSet, fetchCardsForSerie } from '@/lib/tcgdex'
 import { calcScore, nextStage, pickRandom } from '@/lib/gameLogic'
 import { Card, CardBrief, GameStatus, Stage } from '@/lib/types'
 
@@ -63,10 +63,14 @@ export function useGameState() {
     }
   }, [])
 
-  const startGame = useCallback(async (seriesId: string | null) => {
+  const startGame = useCallback(async (setId: string | null, serieId?: string | null) => {
     setState((s) => ({ ...s, loading: true, error: null }))
     try {
-      const pool = seriesId ? await fetchCardsForSet(seriesId) : await fetchAllCards()
+      const pool = serieId
+        ? await fetchCardsForSerie(serieId)
+        : setId
+          ? await fetchCardsForSet(setId)
+          : await fetchAllCards()
       if (pool.length === 0) {
         setState((s) => ({ ...s, loading: false, error: 'No cards found for this series.' }))
         return

@@ -26,6 +26,17 @@ export default function CardDisplay({ imageUrl, stage }: Props) {
           transition: 'filter 500ms ease',
         }}
       />
+      {/* Cover Pokémon name in top-left — hidden throughout entire game */}
+      <div
+        className="absolute rounded"
+        style={{
+          top: '4%',
+          left: '4%',
+          width: '62%',
+          height: '9%',
+          background: '#1a1a2e',
+        }}
+      />
     </div>
   )
 }
