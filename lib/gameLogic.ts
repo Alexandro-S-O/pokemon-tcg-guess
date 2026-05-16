@@ -9,11 +9,11 @@ export const BASE_POINTS: Record<Stage, number> = {
 }
 
 export const BLUR_VALUES: Record<Stage, string> = {
-  1: 'blur(10px)',
-  2: 'blur(6px)',
+  1: 'blur(8px)',
+  2: 'blur(5px)',
   3: 'blur(3px)',
   4: 'blur(1px)',
-  5: 'blur(0px)',
+  5: 'none',
 }
 
 export function calcScore(stage: Stage, streak: number): number {

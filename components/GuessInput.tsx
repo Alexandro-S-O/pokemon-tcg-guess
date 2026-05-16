@@ -29,8 +29,10 @@ export default function GuessInput({ cardPool, onSubmit, disabled, shake }: Prop
     }
     const lower = v.trim().toLowerCase()
     const seen = new Set<string>()
-    const names = cardPool.map((c) => c.name).filter((n) => { if (seen.has(n)) return false; seen.add(n); return true })
-    setSuggestions(names.filter((n) => n.toLowerCase().includes(lower)).slice(0, 8))
+    const names = cardPool
+      .map((c) => c.name)
+      .filter((n) => { if (seen.has(n)) return false; seen.add(n); return true })
+    setSuggestions(names.filter((n) => n.toLowerCase().includes(lower)).slice(0, 6))
   }
 
   const submit = (guess: string) => {
@@ -47,47 +49,59 @@ export default function GuessInput({ cardPool, onSubmit, disabled, shake }: Prop
     } else if (e.key === 'ArrowUp') {
       setActiveIndex((i) => Math.max(i - 1, -1))
     } else if (e.key === 'Enter') {
-      if (activeIndex >= 0 && suggestions[activeIndex]) {
-        submit(suggestions[activeIndex])
-      } else {
-        submit(value)
-      }
+      submit(activeIndex >= 0 && suggestions[activeIndex] ? suggestions[activeIndex] : value)
     } else if (e.key === 'Escape') {
       setSuggestions([])
     }
   }
 
   return (
-    <div className="relative w-full max-w-sm">
-      <input
-        ref={inputRef}
-        value={value}
-        onChange={(e) => handleChange(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={disabled}
-        placeholder="Who's that Pokémon?"
-        className={`w-full px-4 py-3 rounded-xl bg-white/10 border text-white placeholder-white/30
-          focus:outline-none focus:ring-2 focus:ring-[#f5c518] transition-all
-          ${shake ? 'animate-shake border-red-400' : 'border-white/20'}
-          ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
-        `}
-      />
+    <div className="w-full max-w-md flex flex-col gap-4">
+      <div className="relative">
+        {/* Autocomplete dropdown — appears above the input */}
+        {suggestions.length > 0 && !disabled && (
+          <ul className="absolute bottom-full left-0 w-full bg-surface-container-high border-x-2 border-t-2 border-on-background z-10">
+            {suggestions.map((name, i) => (
+              <li
+                key={name}
+                onMouseDown={() => submit(name)}
+                className={`px-4 py-2 text-label-md font-label-md cursor-pointer border-b border-on-background/10 transition-colors ${
+                  i === activeIndex
+                    ? 'bg-primary text-on-primary'
+                    : 'hover:bg-primary-fixed hover:text-on-primary-fixed'
+                }`}
+              >
+                {name.toUpperCase()}
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {suggestions.length > 0 && !disabled && (
-        <ul className="absolute z-50 bottom-full mb-1 w-full bg-[#111827] border border-white/20 rounded-xl overflow-hidden shadow-xl">
-          {suggestions.map((name, i) => (
-            <li
-              key={name}
-              onMouseDown={() => submit(name)}
-              className={`px-4 py-2 text-white cursor-pointer text-sm transition-colors
-                ${i === activeIndex ? 'bg-[#f5c518] text-black' : 'hover:bg-white/10'}
-              `}
-            >
-              {name}
-            </li>
-          ))}
-        </ul>
-      )}
+        <input
+          ref={inputRef}
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          placeholder="WHO'S THAT POKÉMON?"
+          className={`w-full bg-white pixel-border p-4 text-center text-headline-sm font-headline-sm
+            placeholder:opacity-30 placeholder:text-on-background focus:outline-none focus:bg-surface-bright
+            transition-colors uppercase text-on-background
+            ${shake ? 'animate-shake border-error' : ''}
+            ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
+          `}
+        />
+      </div>
+
+      <button
+        onClick={() => submit(activeIndex >= 0 && suggestions[activeIndex] ? suggestions[activeIndex] : value)}
+        disabled={disabled || !value.trim()}
+        className="w-full bg-secondary text-on-secondary py-4 pixel-border pixel-shadow active-press
+          text-headline-sm font-headline-sm uppercase tracking-widest
+          disabled:opacity-40 disabled:cursor-not-allowed disabled:active:transform-none"
+      >
+        SUBMIT GUESS
+      </button>
     </div>
   )
 }

@@ -8,26 +8,32 @@ interface Props {
 
 export default function ScoreBoard({ score, streak, lastPoints }: Props) {
   const multiplier = (1 + streak * 0.1).toFixed(1)
+  const formatted = String(score).padStart(7, '0')
 
   return (
-    <div className="flex items-center gap-4 text-right">
-      <div className="flex flex-col items-end">
-        <span className="text-white/40 text-xs uppercase tracking-widest">Score</span>
-        <span className="text-[#f5c518] font-black text-2xl leading-tight tabular-nums">
-          {score.toLocaleString()}
-        </span>
+    <div className="flex items-center gap-6">
+      <div className="flex flex-col items-end leading-none">
+        <span className="text-label-sm font-label-sm uppercase opacity-80">SCORE</span>
+        <span className="text-headline-sm font-headline-sm">{formatted}</span>
         {lastPoints !== null && lastPoints > 0 && (
-          <span className="text-green-400 text-xs animate-bounce">+{lastPoints}</span>
+          <span className="text-tertiary-fixed text-xs animate-bounce">+{lastPoints}</span>
         )}
       </div>
 
-      <div className="flex flex-col items-end">
-        <span className="text-white/40 text-xs uppercase tracking-widest">Streak</span>
-        <span className="text-white font-bold text-xl leading-tight">
-          {streak > 0 ? '🔥' : ''}{streak}
+      <div className="h-8 w-[2px] bg-on-primary/30" />
+
+      <div className="flex flex-col items-end leading-none">
+        <span className="text-label-sm font-label-sm uppercase opacity-80">STREAK</span>
+        <span className="text-headline-sm font-headline-sm text-tertiary-fixed">
+          x{streak} {streak > 0 ? '🔥' : ''}
         </span>
-        <span className="text-purple-300 text-xs">×{multiplier}</span>
       </div>
+
+      {streak > 1 && (
+        <div className="hidden md:flex bg-on-primary text-primary px-2 py-1 pixel-border text-label-md font-label-md">
+          {multiplier}X
+        </div>
+      )}
     </div>
   )
 }

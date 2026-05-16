@@ -12,8 +12,18 @@
   80% { transform: translateX(6px); }
 }
 
+@keyframes pulse-dot {
+  0%   { opacity: 1; transform: scale(1); }
+  50%  { opacity: 0.5; transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 .animate-shake {
   animation: shake 0.4s ease;
+}
+
+.pulse-active {
+  animation: pulse-dot 1.5s infinite ease-in-out;
 }
 
 .material-symbols-outlined {
@@ -31,10 +41,26 @@
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
+.heart-filled {
+  color: #a5161d;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Home screen — line grid */
 .pixel-grid {
   background-image: linear-gradient(#e4e2e1 1px, transparent 1px),
     linear-gradient(90deg, #e4e2e1 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+/* Game screen — dot grid */
+.pixel-bg-grid {
+  background-image: radial-gradient(#dcd9d9 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.pixel-border {
+  border: 2px solid #1b1c1c;
 }
 
 .pixel-shadow {
@@ -48,6 +74,11 @@
 .pixel-button-active:active {
   transform: translate(2px, 2px);
   box-shadow: 0px 0px 0px 0px rgba(27, 28, 28, 1);
+}
+
+.active-press:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .drop-shadow-pixel {
